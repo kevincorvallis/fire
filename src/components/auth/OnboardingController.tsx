@@ -1,81 +1,56 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { User } from "@supabase/supabase-js";
+import { Modal } from "@heroui/react";
+import { useCallback, useEffect, useState } from "react";
 import { loadAppSetting, saveAppSetting } from "@/lib/appSettings";
-import { RecordlySignInDialog } from "./RecordlySignInDialog";
+import { OnboardingPermissions } from "./OnboardingPermissions";
 
-const SEEN_KEY = "recordly.onboarding.v1.seen";
+const PERMISSIONS_REQUESTED_KEY = "recordly.onboarding.permissionsRequested";
 
+/**
+ * Fire has no accounts, so onboarding is only the macOS permissions step. It opens when
+ * recording needs a permission, or when Settings asks to review them.
+ */
 export function OnboardingController({
 	requestNonce,
 	ready,
-	user,
-	configured,
-	callbackError,
 }: {
 	requestNonce: number;
 	ready: boolean;
-	user: User | null;
-	configured: boolean;
-	callbackError?: string;
 }) {
 	const [open, setOpen] = useState(false);
-	const [startWithPermissions, setStartWithPermissions] = useState(false);
-	const checked = useRef(false);
 	useEffect(() => {
-		if (requestNonce > 0) {
-			setStartWithPermissions(true);
-			setOpen(true);
-		}
+		if (requestNonce > 0) setOpen(true);
 	}, [requestNonce]);
+	useEffect(() => {
+		if (ready && loadAppSetting<boolean>(PERMISSIONS_REQUESTED_KEY)) setOpen(true);
+	}, [ready]);
+	useEffect(() => window.electronAPI.onRecordingPermissionsRequested?.(() => setOpen(true)), []);
+
 	const close = useCallback(() => {
-		saveAppSetting("recordly.onboarding.permissionsRequested", false);
-		setStartWithPermissions(false);
+		saveAppSetting(PERMISSIONS_REQUESTED_KEY, false);
 		setOpen(false);
 	}, []);
-
-	useEffect(() => {
-		if (!ready) return;
-		if (!user) {
-			setOpen(true);
-			return;
-		}
-		if (checked.current) return;
-		checked.current = true;
-		if (loadAppSetting<boolean>("recordly.onboarding.permissionsRequested")) {
-			setStartWithPermissions(true);
-			setOpen(true);
-		} else if (!loadAppSetting<boolean>(SEEN_KEY)) setOpen(true);
-	}, [ready, user]);
-
-	useEffect(
-		() =>
-			window.electronAPI.onRecordingPermissionsRequested?.(() => {
-				setStartWithPermissions(true);
-				setOpen(true);
-			}),
-		[],
-	);
-
 	const finish = () => {
-		if (!user) return;
-		saveAppSetting(SEEN_KEY, true);
 		close();
 		void window.electronAPI.showRecordingHud();
 	};
 
 	return (
-		<RecordlySignInDialog
-			onboarding
-			startWithPermissions={startWithPermissions}
-			variant="wide"
-			open={open}
+		<Modal
+			isOpen={open}
 			onOpenChange={(value) => {
-				if (!value && user) close();
+				if (!value) close();
 			}}
-			user={user}
-			configured={configured}
-			callbackError={callbackError}
-			onAuthenticated={finish}
-		/>
+		>
+			<Modal.Backdrop>
+				<Modal.Container size="lg" placement="center" className="p-4">
+					<Modal.Dialog
+						aria-label="Recording permissions"
+						className="w-full max-w-[640px] gap-0 overflow-hidden rounded-3xl p-0 pb-4"
+					>
+						<OnboardingPermissions onBack={close} onFinish={finish} />
+					</Modal.Dialog>
+				</Modal.Container>
+			</Modal.Backdrop>
+		</Modal>
 	);
 }

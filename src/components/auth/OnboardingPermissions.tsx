@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@heroui/react";
-import { ArrowLeft, ArrowRight, Check, Cursor, Monitor } from "@phosphor-icons/react";
+import { ArrowRight, Check, Cursor, Monitor } from "@phosphor-icons/react";
 import { OnboardingBody, OnboardingFooter, OnboardingHeader } from "./OnboardingLayout";
 import { PermissionsConfetti } from "./PermissionsConfetti";
 import { APP_NAME } from "@/lib/branding";
@@ -195,9 +195,8 @@ export function OnboardingPermissions({
 				)}
 			</OnboardingBody>
 			<OnboardingFooter>
-				<Button variant="ghost" aria-label="Back to account" onPress={onBack}>
-					<ArrowLeft size={16} />
-					Back
+				<Button variant="ghost" onPress={onBack}>
+					Not now
 				</Button>
 				<Button
 					isDisabled={

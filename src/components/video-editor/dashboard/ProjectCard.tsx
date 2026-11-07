@@ -1,7 +1,6 @@
 import { Globe } from "@phosphor-icons/react";
 import { ProjectFolderChips } from "./ProjectFolderChips";
 import { RawThumbnail } from "./RawRecordings";
-import { AccountAvatar } from "@/components/ui/account-avatar";
 import { Dropdown } from "@heroui/react";
 import { Check, DotsThree, FolderSimple, Plus } from "@/components/ui/icons";
 import { useRef, useState } from "react";
@@ -14,7 +13,6 @@ import type { DashboardModel } from "./useDashboardModel";
 
 type Props = Pick<
 	DashboardProps & DashboardModel,
-	| "accountLabel"
 	| "busy"
 	| "selecting"
 	| "selected"
@@ -28,7 +26,6 @@ type Props = Pick<
 	| "assignFolder"
 > & { entry: ProjectLibraryEntry; webUrl?: string; webReady?: boolean; onDelete?: () => void };
 export function ProjectCard({
-	accountLabel,
 	webUrl,
 	webReady = true,
 	onDelete,
@@ -117,7 +114,6 @@ export function ProjectCard({
 				)}
 			</Button>
 			<div className="relative flex items-start justify-between gap-4 pt-5">
-				<AccountAvatar label={accountLabel} className="!size-[48px]" />
 				<div data-project-caption className="h-12 min-w-0 flex-1">
 					{editing ? (
 						<form
@@ -256,12 +252,14 @@ export function ProjectCard({
 										id="rename"
 										onAction={() => {
 											setName(entry.name);
-											requestAnimationFrame(() => requestAnimationFrame(() => setEditing(true)));
+											requestAnimationFrame(() =>
+												requestAnimationFrame(() => setEditing(true)),
+											);
 										}}
 									>
 										Rename
 									</Dropdown.Item>
-									{!entry.rawSource && (
+									{!entry.rawSource && onShareProject && (
 										<Dropdown.Item
 											id="share"
 											onAction={() =>

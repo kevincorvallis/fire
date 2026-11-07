@@ -76,8 +76,6 @@ export function DiscordLinkButton() {
 	);
 }
 
-export { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
-
 export function KeyboardShortcutsDialog({
 	triggerLabel,
 	triggerClassName,

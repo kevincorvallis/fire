@@ -41,10 +41,10 @@ interface EditorDialogsProps {
 	projectLibraryEntries: ProjectLibraryEntry[];
 	projectLibraryLoading: boolean;
 	projectError: string | null;
-	onDashboardSignIn: () => void;
+	onDashboardSignIn?: () => void;
 	onDeleteProjects: (paths: string[]) => Promise<string[]>;
 	onRenameProject: (path: string, name: string) => Promise<string>;
-	onShareProject: (path: string) => Promise<void>;
+	onShareProject?: (path: string) => Promise<void>;
 	accountLabel?: string;
 	authToken?: string;
 	handleImportMediaOrProject: () => Promise<void>;
