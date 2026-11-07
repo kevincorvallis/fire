@@ -323,6 +323,9 @@ export function EditorShell(props: Props) {
 						zoomCommands={zoomCommands}
 						annotationCommands={annotationCommands}
 						effectiveCursorTelemetry={cursor.effectiveCursorTelemetry}
+						onFastForwardIdle={() =>
+							clipCommands.handleFastForwardIdle(cursor.normalizedCursorTelemetry)
+						}
 						effectiveShowCursor={effectiveShowCursor}
 						isCropped={ui.isCropped}
 						handleOpenCropEditor={ui.handleOpenCropEditor}

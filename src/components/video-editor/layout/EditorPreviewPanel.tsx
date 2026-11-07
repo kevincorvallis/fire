@@ -4,6 +4,7 @@ import {
 	CaretDown,
 	Check,
 	Crop,
+	FastForward,
 	MagicWand,
 	MagnifyingGlassPlus,
 	Pause,
@@ -61,6 +62,7 @@ type Props = {
 	zoomCommands: ReturnType<typeof useZoomRegionCommands>;
 	annotationCommands: ReturnType<typeof useAnnotationRegionCommands>;
 	effectiveCursorTelemetry: ReturnType<typeof useTimelineState>["cursorTelemetry"];
+	onFastForwardIdle: () => void;
 	effectiveShowCursor: boolean;
 	isCropped: boolean;
 	handleOpenCropEditor: () => void;
@@ -104,6 +106,7 @@ export function EditorPreviewPanel(props: Props) {
 		zoomCommands,
 		annotationCommands,
 		effectiveCursorTelemetry,
+		onFastForwardIdle,
 		effectiveShowCursor,
 		isCropped,
 		handleOpenCropEditor,
@@ -288,6 +291,16 @@ export function EditorPreviewPanel(props: Props) {
 						title={t("timeline.zoom.suggestZooms")}
 					>
 						<MagicWand className="h-4 w-4" />
+					</Button>
+					<Button
+						onClick={onFastForwardIdle}
+						variant="ghost"
+						size="icon"
+						className="h-9 w-9"
+						title={t("editor.toolbar.fastForwardIdle", "Fast-forward idle time")}
+						aria-label={t("editor.toolbar.fastForwardIdle", "Fast-forward idle time")}
+					>
+						<FastForward className="h-4 w-4" />
 					</Button>
 					<Button
 						onClick={() => timelineRef.current?.splitClip()}

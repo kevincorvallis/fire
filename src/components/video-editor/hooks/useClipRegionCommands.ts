@@ -10,7 +10,8 @@ import {
 } from "../clipSequence";
 import { getClipSourceStartMs, type AnnotationRegion, type AudioRegion } from "../types";
 import { planClipSplit } from "../clipSplit";
-import type { ClipRegion, EditorEffectSection, ZoomRegion } from "../types";
+import { findIdleSpans, planIdleFastForward } from "../idleFastForward";
+import type { ClipRegion, CursorTelemetryPoint, EditorEffectSection, ZoomRegion } from "../types";
 import { supportsPreviewPlaybackRate } from "../videoPlayback/playbackRate";
 
 type Translator = (
@@ -165,6 +166,35 @@ export function useClipRegionCommands({
 		[clipRegions, selectedClipId, applySequence, t],
 	);
 
+	const handleFastForwardIdle = useCallback(
+		(cursorTelemetry: CursorTelemetryPoint[]) => {
+			const plan = planIdleFastForward({
+				clipRegions,
+				idleSpans: findIdleSpans(cursorTelemetry, { endMs: sourceDurationMs }),
+				speed: supportsPreviewPlaybackRate(4) ? 4 : 2,
+				createId: () => `clip-${nextClipIdRef.current++}`,
+			});
+			if (!plan) {
+				toast.info(
+					t(
+						"editor.timeline.noIdleFound",
+						"No idle stretches to fast-forward. Fire looks for 2s+ where the cursor sits still.",
+					),
+				);
+				return;
+			}
+			applySequence(plan.clips);
+			toast.success(
+				t(
+					"editor.timeline.idleFastForwarded",
+					"Fast-forwarded {{count}} idle stretch(es), saving {{seconds}}s.",
+					{ count: plan.spanCount, seconds: (plan.savedMs / 1000).toFixed(1) },
+				),
+			);
+		},
+		[clipRegions, sourceDurationMs, nextClipIdRef, applySequence, t],
+	);
+
 	const handleClipMutedChange = useCallback(
 		(muted: boolean) => {
 			if (!selectedClipId) return;
@@ -199,6 +229,7 @@ export function useClipRegionCommands({
 		handleClipSplit,
 		handleClipSpanChange,
 		handleClipSpeedChange,
+		handleFastForwardIdle,
 		handleClipMutedChange,
 		handleClipShowSourceAudioChange,
 		handleClipDelete,
