@@ -184,12 +184,19 @@ export function useClipRegionCommands({
 				return;
 			}
 			applySequence(plan.clips);
+			const vars = { count: plan.spanCount, seconds: (plan.savedMs / 1000).toFixed(1) };
 			toast.success(
-				t(
-					"editor.timeline.idleFastForwarded",
-					"Fast-forwarded {{count}} idle stretch(es), saving {{seconds}}s.",
-					{ count: plan.spanCount, seconds: (plan.savedMs / 1000).toFixed(1) },
-				),
+				plan.spanCount === 1
+					? t(
+							"editor.timeline.idleFastForwardedOne",
+							"Fast-forwarded 1 idle stretch, saving {{seconds}}s.",
+							vars,
+						)
+					: t(
+							"editor.timeline.idleFastForwardedMany",
+							"Fast-forwarded {{count}} idle stretches, saving {{seconds}}s.",
+							vars,
+						),
 			);
 		},
 		[clipRegions, sourceDurationMs, nextClipIdRef, applySequence, t],

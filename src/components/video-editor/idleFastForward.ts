@@ -81,8 +81,10 @@ export function planIdleFastForward({
 		if (clip.speed === 1) {
 			let cursor = sourceStart;
 			for (const span of spans) {
-				let a = Math.max(span.startMs + marginMs, sourceStart);
-				const b = Math.min(span.endMs - marginMs, sourceEnd);
+				// Margins protect activity next to the idle stretch, so skip them where the
+				// stretch runs past this clip's edge (recording start/end or a cut).
+				let a = span.startMs <= sourceStart ? sourceStart : span.startMs + marginMs;
+				const b = span.endMs >= sourceEnd ? sourceEnd : span.endMs - marginMs;
 				if (b - a < minSpanMs) continue;
 				if (a - cursor < SLIVER_MS) a = cursor;
 				const last = fast[fast.length - 1];

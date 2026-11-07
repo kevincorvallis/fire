@@ -99,6 +99,20 @@ describe("planIdleFastForward", () => {
 		expect(plan!.clips[0].endMs).toBe(2500);
 	});
 
+	it("keeps no margin where the idle stretch runs to the end of the recording", () => {
+		const plan = planIdleFastForward({
+			clipRegions: [clip({ endMs: 10_529 })],
+			idleSpans: [{ startMs: 2938, endMs: 10_529 }],
+			speed: 4,
+			marginMs: 400,
+			createId,
+		});
+		expect(plan!.clips.map(({ speed, sourceStartMs }) => [speed, sourceStartMs])).toEqual([
+			[1, 0],
+			[4, 3338],
+		]);
+	});
+
 	it("leaves clips that already have a custom speed alone", () => {
 		expect(
 			planIdleFastForward({
