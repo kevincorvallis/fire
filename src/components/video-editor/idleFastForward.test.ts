@@ -49,6 +49,11 @@ describe("findIdleSpans", () => {
 		expect(findIdleSpans(telemetry(4000, [1000, 2500]), { minIdleMs: 2000 })).toEqual([]);
 	});
 
+	it("starts the first stretch at the recording start, not the first sample", () => {
+		const points = telemetry(4000, [3000]).filter((p) => p.timeMs >= 200);
+		expect(findIdleSpans(points, { minIdleMs: 2000 })).toEqual([{ startMs: 0, endMs: 3000 }]);
+	});
+
 	it("ignores sub-threshold jitter", () => {
 		const points = telemetry(5000).map((p, i) => ({ ...p, cx: p.cx + (i % 2) * 0.0005 }));
 		expect(findIdleSpans(points, { minIdleMs: 2000 })).toEqual([{ startMs: 0, endMs: 5000 }]);

@@ -32,7 +32,8 @@ export function findIdleSpans(
 
 	const spans: IdleSpan[] = [];
 	let anchor = sorted[0];
-	let idleStart = anchor.timeMs;
+	// Sampling starts a beat after the recording; nothing happened before the first sample.
+	let idleStart = Math.min(0, anchor.timeMs);
 	for (const point of sorted.slice(1)) {
 		const moved = Math.hypot(point.cx - anchor.cx, point.cy - anchor.cy) > moveThreshold;
 		const clicked =
