@@ -31,7 +31,7 @@ Packaged builds: `npm run build:mac` (also `build:win`, `build:linux`).
 - Auto-updates check this repo's releases, not Recordly's.
 - Sign-in uses the `klee-fire://` URL scheme so it doesn't collide with an installed Recordly.
 - Announcements and bug reports point to this repo.
-- Sign-in and cloud sharing stay off unless you set the Supabase and share-endpoint values in `.env` (see `.env.example`). Recordly's hosted services are not used.
+- No accounts or cloud: the sign-in/welcome screen, account settings, "Shared" view, share links, and send-to-support feedback are removed. Onboarding is only the macOS permissions prompt. Recordly's hosted services are not used. (Upstream's main-process auth and cloud-share handlers are still in `electron/` but nothing in the UI calls them.)
 
 Internal identifiers (`recordlyAuth`, `RECORDLY_*` env vars, settings keys, native helper names) keep their upstream names so upstream changes merge cleanly.
 
