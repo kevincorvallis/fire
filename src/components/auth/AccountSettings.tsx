@@ -9,6 +9,7 @@ import {
 	signOutRecordly,
 	updateAccountName,
 } from "@/lib/auth/recordlyAuth";
+import { APP_NAME } from "@/lib/branding";
 
 const providerNames: Record<string, string> = {
 	email: "Email magic link",
@@ -164,7 +165,7 @@ export function AccountSettings({ user }: { user: User | null }) {
 			)}
 			<SettingsRow
 				title="Sign out"
-				description="Sign out of Recordly on all devices. Local projects stay on this computer."
+				description={`Sign out of ${APP_NAME} on all devices. Local projects stay on this computer.`}
 				stacked
 			>
 				<Button

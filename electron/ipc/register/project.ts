@@ -49,6 +49,7 @@ import {
 	normalizePath,
 	parseJsonWithByteOrderMark,
 } from "../utils";
+import { APP_NAME } from "../../../src/lib/branding";
 
 function normalizeRecordingTimeOffsetMs(value: unknown): number {
 	return typeof value === "number" && Number.isFinite(value) ? Math.round(value) : 0;
@@ -492,10 +493,10 @@ export function registerProjectHandlers() {
 				const defaultName = `${safeName}.${PROJECT_FILE_EXTENSION}`;
 
 				const result = await dialog.showSaveDialog({
-					title: "Save Recordly Project",
+					title: `Save ${APP_NAME} Project`,
 					defaultPath: path.join(projectsDir, defaultName),
 					filters: [
-						{ name: "Recordly Project", extensions: [PROJECT_FILE_EXTENSION] },
+						{ name: `${APP_NAME} Project`, extensions: [PROJECT_FILE_EXTENSION] },
 						{ name: "JSON", extensions: ["json"] },
 					],
 					properties: ["createDirectory", "showOverwriteConfirmation"],
@@ -645,11 +646,11 @@ export function registerProjectHandlers() {
 		try {
 			const projectsDir = await getProjectsDir();
 			const result = await dialog.showOpenDialog({
-				title: "Open Recordly Project",
+				title: `Open ${APP_NAME} Project`,
 				defaultPath: projectsDir,
 				filters: [
 					{
-						name: "Recordly Project",
+						name: `${APP_NAME} Project`,
 						extensions: [PROJECT_FILE_EXTENSION, ...LEGACY_PROJECT_FILE_EXTENSIONS],
 					},
 					{ name: "JSON", extensions: ["json"] },

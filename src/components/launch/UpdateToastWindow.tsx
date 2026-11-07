@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/contexts/I18nContext";
 import styles from "./UpdateToastWindow.module.css";
+import { APP_NAME } from "@/lib/branding";
 
 export type UpdateToastPayload = {
 	version: string;
@@ -61,7 +62,7 @@ function getDetail(payload: UpdateToastPayload, t: Translate) {
 	if (payload.phase === "available" && payload.isExperimental) {
 		return t(
 			"launch.updateToast.experimentalDescription",
-			"You've opted into experimental updates so you have the choice to test the latest update of Recordly before it's widely available.",
+			`You've opted into experimental updates so you have the choice to test the latest update of ${APP_NAME} before it's widely available.`,
 		);
 	}
 
@@ -158,7 +159,11 @@ export function UpdateToastWindow({
 
 	return (
 		<div className={`${styles.window} launch-theme`}>
-			<Card className="w-full flex-row gap-3" aria-live="polite" aria-label="Recordly update">
+			<Card
+				className="w-full flex-row gap-3"
+				aria-live="polite"
+				aria-label={`${APP_NAME} update`}
+			>
 				<div
 					className={`${styles.icon} ${payload.phase === "error" ? styles.iconError : ""}`}
 				>

@@ -6,6 +6,7 @@ import {
 	submitExportErrorReport,
 } from "@/lib/feedback/exportErrorReporting";
 import type { CloudPlan } from "../../../services/supabase/functions/_shared/exportErrorReport";
+import { APP_NAME } from "@/lib/branding";
 
 export function ExportErrorReportButton({
 	error,
@@ -43,12 +44,12 @@ export function ExportErrorReportButton({
 					</DialogHeader>
 					{sent ? (
 						<p className="text-sm">
-							Thanks. The technical report was sent to Recordly support.
+							Thanks. The technical report was sent to {APP_NAME} support.
 						</p>
 					) : (
 						<>
 							<p className="text-sm text-muted-foreground">
-								Send technical details to Recordly support through Supabase. No
+								Send technical details to {APP_NAME} support through Supabase. No
 								account ID, email, recording, file path, attachments or console logs
 								are included. Supabase may keep connection logs separately.
 							</p>

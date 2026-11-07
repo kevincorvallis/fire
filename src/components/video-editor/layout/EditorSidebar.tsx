@@ -16,6 +16,7 @@ import type { useI18n } from "@/contexts/I18nContext";
 import ExtensionManager from "../ExtensionManager";
 import { SettingsPanel } from "../SettingsPanel";
 import type { EditorEffectSection } from "../types";
+import { APP_NAME } from "@/lib/branding";
 
 type Props = {
 	accountUser?: User | null;
@@ -109,7 +110,7 @@ export function EditorSidebar({
 						variant="ghost"
 						isIconOnly
 						className="mt-auto"
-						aria-label="Recordly account"
+						aria-label={`${APP_NAME} account`}
 						onPress={onAccountClick}
 					>
 						<AccountAvatar user={accountUser} className="!size-7" />

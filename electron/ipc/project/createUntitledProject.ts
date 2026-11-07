@@ -16,7 +16,7 @@ export async function createUntitledProject(directory: string, contents: string)
 		for (let suffix = 0; ; suffix++) {
 			const target = path.join(
 				directory,
-				`Untitled Project${suffix ? ` ${suffix}` : ""}.recordly`,
+				`Untitled Project${suffix ? ` ${suffix}` : ""}.fire`,
 			);
 			try {
 				await fs.link(temporary, target);

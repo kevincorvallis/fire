@@ -20,8 +20,9 @@ import { useShortcuts } from "@/contexts/ShortcutsContext";
 import { formatBinding, SHORTCUT_ACTIONS, SHORTCUT_LABELS } from "@/lib/shortcuts";
 import { formatShortcut } from "@/utils/platformUtils";
 import { toast } from "@/components/ui/toast";
+import { APP_ISSUES_URL } from "@/lib/branding";
 
-export const RECORDLY_ISSUES_URL = "https://github.com/webadderallorg/Recordly/issues";
+export const RECORDLY_ISSUES_URL = APP_ISSUES_URL;
 const RECORDLY_DISCORD_URL = "https://discord.gg/sdv2FBVNgE";
 export const APP_HEADER_ACTION_BUTTON_CLASS =
 	"h-7 px-2 text-xs text-muted-foreground hover:bg-foreground/10 hover:text-foreground transition-all gap-1.5";

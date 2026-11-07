@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import type { ProjectLibraryEntry } from "../ProjectBrowserDialog";
 import { Dashboard } from "../dashboard/Dashboard";
+import { APP_NAME } from "@/lib/branding";
 
 export type UnsavedChangesDecision = "cancel" | "discard" | "save";
 
@@ -100,7 +101,7 @@ export function EditorDialogs({
 							<DialogDescription className="text-muted-foreground">
 								{t(
 									"editor.project.saveDescription",
-									"Name this project. It will be saved in your Recordly Projects folder.",
+									`Name this project. It will be saved in your ${APP_NAME} Projects folder.`,
 								)}
 							</DialogDescription>
 						</DialogHeader>
@@ -120,7 +121,7 @@ export function EditorDialogs({
 									aria-label={t("editor.project.saveNameLabel", "Project name")}
 								/>
 								<span className="shrink-0 px-3 text-xs font-medium text-muted-foreground/70">
-									.recordly
+									.fire
 								</span>
 							</Card>
 						</div>
@@ -216,7 +217,7 @@ export function EditorDialogs({
 						<DialogDescription className="text-muted-foreground">
 							{t(
 								"editor.nativeCaptureUnavailable.description",
-								"Your device does not support native capture. This could be for a variety of reasons we haven’t figured out yet. This doesn’t break Recordly, but it does make cursor smoothing impossible.",
+								`Your device does not support native capture. This could be for a variety of reasons we haven’t figured out yet. This doesn’t break ${APP_NAME}, but it does make cursor smoothing impossible.`,
 							)}
 						</DialogDescription>
 					</DialogHeader>

@@ -11,6 +11,7 @@ import {
 } from "../cloudShareContract";
 import { isOwnedExportPath } from "../export/exportStream";
 import { isAllowedLocalReadPath } from "../project/manager";
+import { APP_NAME } from "../../../src/lib/branding";
 
 const MAX_CONTROL_RESPONSE_BYTES = 1024 * 1024;
 const MAX_AUTH_TOKEN_BYTES = 8192;
@@ -336,7 +337,7 @@ export function registerCloudShareHandlers() {
 				const isRecordlyExport =
 					isOwnedExportPath(requestedPath) || isOwnedExportPath(resolvedPath);
 				if (!isRecordlyExport && !isAllowedLocalReadPath(resolvedPath)) {
-					throw new Error("This file is outside Recordly's approved media locations.");
+					throw new Error(`This file is outside ${APP_NAME}'s approved media locations.`);
 				}
 				const stat = await fs.stat(resolvedPath);
 				if (!stat.isFile()) throw new Error("The exported video could not be found.");
@@ -348,7 +349,7 @@ export function registerCloudShareHandlers() {
 
 				const token = typeof input.token === "string" ? input.token.trim() : "";
 				if (!token || Buffer.byteLength(token) > MAX_AUTH_TOKEN_BYTES) {
-					throw new Error("Sign in to Recordly before creating a shared link.");
+					throw new Error(`Sign in to ${APP_NAME} before creating a shared link.`);
 				}
 				const controlHeaders: Record<string, string> = {
 					"content-type": "application/json",

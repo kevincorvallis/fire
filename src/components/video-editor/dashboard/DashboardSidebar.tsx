@@ -10,6 +10,7 @@ import type { DashboardProps } from "./types";
 
 import type { DashboardModel } from "./useDashboardModel";
 import { FOLDER_COLORS } from "./useProjectFolders";
+import { APP_NAME, UPSTREAM_ATTRIBUTION, UPSTREAM_NAME, UPSTREAM_REPO_URL } from "@/lib/branding";
 
 export function DashboardSidebar({
 	busy,
@@ -49,7 +50,7 @@ export function DashboardSidebar({
 						alt=""
 						className="size-7 rounded-lg"
 					/>
-					<span className="text-[15px] font-semibold tracking-tight">Recordly</span>
+					<span className="text-[15px] font-semibold tracking-tight">{APP_NAME}</span>
 				</div>
 				<RecordNewButton busy={busy} run={run} className="mb-5 w-full" />
 				<nav className="space-y-1">
@@ -153,6 +154,14 @@ export function DashboardSidebar({
 						<UserCircle weight="fill" className="size-[18px] shrink-0" />
 						<span className="truncate">{accountLabel || "Sign in"}</span>
 					</Button>
+					<button
+						type="button"
+						className="block w-full truncate px-3 pt-2 text-left text-[11px] text-muted-foreground/70 hover:text-foreground"
+						title={UPSTREAM_ATTRIBUTION}
+						onClick={() => void window.electronAPI.openExternalUrl(UPSTREAM_REPO_URL)}
+					>
+						Based on {UPSTREAM_NAME}
+					</button>
 				</div>
 			</aside>
 		</>

@@ -30,6 +30,7 @@ import {
 	signInWithSocial,
 	signOutRecordly,
 } from "@/lib/auth/recordlyAuth";
+import { APP_NAME } from "@/lib/branding";
 
 const MotionDialog = motion.create(Modal.Dialog);
 
@@ -174,7 +175,7 @@ export function RecordlySignInDialog({
 		void run("link", async () => {
 			await sendSignInLink(email.trim());
 			setMessage(
-				"Check your inbox to verify your email and continue to Recordly. Open the link on this computer with Recordly running.",
+				`Check your inbox to verify your email and continue to ${APP_NAME}. Open the link on this computer with ${APP_NAME} running.`,
 			);
 			setLinkSent(true);
 		});
@@ -237,7 +238,7 @@ export function RecordlySignInDialog({
 													alt=""
 													className="size-7 rounded-lg sm:size-8"
 												/>
-												Recordly
+												{APP_NAME}
 											</span>
 										</>
 									)
@@ -245,19 +246,19 @@ export function RecordlySignInDialog({
 								description={
 									user
 										? user.email || "You’re signed in and ready to continue."
-										: "Sign in to Recordly to start recording, save your work and share it."
+										: `Sign in to ${APP_NAME} to start recording, save your work and share it.`
 								}
 							/>
 						) : (
 							<Modal.Header className="items-center gap-3 text-center">
-								<div className="flex items-center gap-3" aria-label="Recordly">
+								<div className="flex items-center gap-3" aria-label={`${APP_NAME}`}>
 									<img
 										src={`${import.meta.env.BASE_URL}app-icons/recordly-128.png`}
 										alt=""
 										className="size-12 rounded-xl"
 									/>
 									<span className="text-3xl font-semibold tracking-tight">
-										Recordly
+										{APP_NAME}
 									</span>
 								</div>
 								<Modal.Heading className="whitespace-nowrap text-[clamp(12px,5cqw,22px)] font-semibold leading-tight tracking-tight">
@@ -471,7 +472,7 @@ export function RecordlySignInDialog({
 					<MotionDialog
 						layout={!onboarding}
 						transition={transition}
-						aria-label={onboarding ? "Welcome to Recordly" : undefined}
+						aria-label={onboarding ? `Welcome to ${APP_NAME}` : undefined}
 						data-onboarding-state={
 							onboarding ? (permissions ? "permissions" : "login") : undefined
 						}

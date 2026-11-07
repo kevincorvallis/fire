@@ -11,6 +11,7 @@ import {
 	getHudOverlayWindow,
 	reassertHudOverlayMousePassthrough,
 } from "../../windows";
+import { APP_NAME } from "../../../src/lib/branding";
 import { ALLOW_RECORDLY_WINDOW_CAPTURE } from "../constants";
 import {
 	getNativeMacWindowSources,
@@ -176,7 +177,7 @@ export async function getDesktopSources(
 	const ownWindowNames = new Set(
 		[
 			app.getName(),
-			"Recordly",
+			APP_NAME,
 			...BrowserWindow.getAllWindows().flatMap((win) => {
 				const title = win.getTitle().trim();
 				return title ? [title] : [];
@@ -246,7 +247,10 @@ export async function getDesktopSources(
 					return true;
 				}
 
-				if (ALLOW_RECORDLY_WINDOW_CAPTURE && normalizedName.includes("recordly")) {
+				if (
+					ALLOW_RECORDLY_WINDOW_CAPTURE &&
+					normalizedName.includes(APP_NAME.toLowerCase())
+				) {
 					return true;
 				}
 
@@ -302,7 +306,8 @@ export async function getDesktopSources(
 
 				if (
 					ALLOW_RECORDLY_WINDOW_CAPTURE &&
-					(normalizedAppName === "recordly" || normalizedWindowName?.includes("recordly"))
+					(normalizedAppName === APP_NAME.toLowerCase() ||
+						normalizedWindowName?.includes(APP_NAME.toLowerCase()))
 				) {
 					return true;
 				}
@@ -361,7 +366,10 @@ export async function getDesktopSources(
 					return true;
 				}
 
-				if (ALLOW_RECORDLY_WINDOW_CAPTURE && normalizedName.includes("recordly")) {
+				if (
+					ALLOW_RECORDLY_WINDOW_CAPTURE &&
+					normalizedName.includes(APP_NAME.toLowerCase())
+				) {
 					return true;
 				}
 
