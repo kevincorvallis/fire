@@ -48,3 +48,20 @@ it("opens Home without reloading and retains the destination for recording compl
 	expect(target.reload).toHaveBeenCalledOnce();
 	expect(create).not.toHaveBeenCalled();
 });
+
+it("remembers an editor opened for Home from the HUD so the next recording reloads it", () => {
+	const editor = {
+		isDestroyed: () => false,
+		isMinimized: () => false,
+		reload: vi.fn(),
+		show: vi.fn(),
+		focus: vi.fn(),
+	};
+	const create = vi.fn(() => editor as unknown as BrowserWindow);
+	const navigation = createRecordingEditorNavigation(create);
+	navigation.open(false);
+	expect(create).toHaveBeenCalledOnce();
+	navigation.open();
+	expect(editor.reload).toHaveBeenCalledOnce();
+	expect(create).toHaveBeenCalledOnce();
+});

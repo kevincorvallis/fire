@@ -411,7 +411,7 @@ export function registerSourceHandlers({
 	createSourceSelectorWindow,
 	getSourceSelectorWindow,
 }: {
-	createEditorWindow: () => void;
+	createEditorWindow: () => BrowserWindow | void;
 	createSourceSelectorWindow: () => BrowserWindow;
 	getSourceSelectorWindow: () => BrowserWindow | null;
 }) {
