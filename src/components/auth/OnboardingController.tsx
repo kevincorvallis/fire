@@ -1,5 +1,6 @@
 import { Modal } from "@heroui/react";
 import { useCallback, useEffect, useState } from "react";
+import { hasRecordingPermissions } from "@/hooks/recordingPermissionGate";
 import { loadAppSetting, saveAppSetting } from "@/lib/appSettings";
 import { OnboardingPermissions } from "./OnboardingPermissions";
 
@@ -21,7 +22,17 @@ export function OnboardingController({
 		if (requestNonce > 0) setOpen(true);
 	}, [requestNonce]);
 	useEffect(() => {
-		if (ready && loadAppSetting<boolean>(PERMISSIONS_REQUESTED_KEY)) setOpen(true);
+		if (!ready || !loadAppSetting<boolean>(PERMISSIONS_REQUESTED_KEY)) return;
+		// The request flag persists across launches; only reopen if a permission is still missing.
+		let cancelled = false;
+		void hasRecordingPermissions(window.electronAPI).then((granted) => {
+			if (cancelled) return;
+			if (granted) saveAppSetting(PERMISSIONS_REQUESTED_KEY, false);
+			else setOpen(true);
+		});
+		return () => {
+			cancelled = true;
+		};
 	}, [ready]);
 	useEffect(() => window.electronAPI.onRecordingPermissionsRequested?.(() => setOpen(true)), []);
 
