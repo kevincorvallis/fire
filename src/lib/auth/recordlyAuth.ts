@@ -1,10 +1,11 @@
 import { createClient, type Provider, type User } from "@supabase/supabase-js";
+import { APP_NAME } from "@/lib/branding";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
 const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
 const callbackUrl = import.meta.env.DEV
 	? "http://127.0.0.1:43821/auth/callback"
-	: "recordly://auth/callback";
+	: "klee-fire://auth/callback";
 
 export const recordlyAuthConfigured = Boolean(supabaseUrl && supabasePublishableKey);
 
@@ -39,7 +40,7 @@ export const recordlyAuth = recordlyAuthConfigured
 function requireAuth() {
 	if (!recordlyAuth) {
 		throw new Error(
-			"Recordly Auth is not configured. Add the Supabase URL and publishable key.",
+			`${APP_NAME} Auth is not configured. Add the Supabase URL and publishable key.`,
 		);
 	}
 	return recordlyAuth;
@@ -106,7 +107,9 @@ async function exchangeAuthCallback(url: string): Promise<void> {
 	if (providerError) throw new Error(providerError);
 	const code = params.get("code");
 	if (!code) {
-		throw new Error("Request a new sign-in link from Recordly, then open it on this computer.");
+		throw new Error(
+			`Request a new sign-in link from ${APP_NAME}, then open it on this computer.`,
+		);
 	}
 	const client = requireAuth();
 	const { error } = await client.auth.exchangeCodeForSession(code);

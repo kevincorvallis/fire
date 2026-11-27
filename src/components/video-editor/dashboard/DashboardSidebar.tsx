@@ -1,8 +1,7 @@
-import { FeedbackDialog } from "@/components/feedback/FeedbackDialog";
 import { RecordNewButton } from "./RecordNewButton";
 import { SidebarCards } from "./SidebarCards";
 import { FolderRow } from "./FolderRow";
-import { Cloud, File, GearSix, House, Plus, UserCircle } from "@/components/ui/icons";
+import { File, GearSix, House, Plus } from "@/components/ui/icons";
 
 import { Button } from "@/components/ui/button";
 
@@ -10,6 +9,7 @@ import type { DashboardProps } from "./types";
 
 import type { DashboardModel } from "./useDashboardModel";
 import { FOLDER_COLORS } from "./useProjectFolders";
+import { APP_NAME, UPSTREAM_ATTRIBUTION, UPSTREAM_NAME, UPSTREAM_REPO_URL } from "@/lib/branding";
 
 export function DashboardSidebar({
 	busy,
@@ -21,8 +21,6 @@ export function DashboardSidebar({
 	metadata,
 	update,
 	navClass,
-	onSignIn,
-	accountLabel,
 }: Pick<
 	DashboardProps & DashboardModel,
 	| "busy"
@@ -34,8 +32,6 @@ export function DashboardSidebar({
 	| "metadata"
 	| "update"
 	| "navClass"
-	| "onSignIn"
-	| "accountLabel"
 >) {
 	return (
 		<>
@@ -49,7 +45,7 @@ export function DashboardSidebar({
 						alt=""
 						className="size-7 rounded-lg"
 					/>
-					<span className="text-[15px] font-semibold tracking-tight">Recordly</span>
+					<span className="text-[15px] font-semibold tracking-tight">{APP_NAME}</span>
 				</div>
 				<RecordNewButton busy={busy} run={run} className="mb-5 w-full" />
 				<nav className="space-y-1">
@@ -61,18 +57,6 @@ export function DashboardSidebar({
 					>
 						<House weight="fill" className="size-[18px]" />
 						Home
-					</Button>
-					<Button
-						variant="ghost"
-						className={navClass(section === "shared")}
-						aria-current={section === "shared" ? "page" : undefined}
-						onClick={() => setSection("shared")}
-					>
-						<Cloud
-							weight={section === "shared" ? "fill" : "regular"}
-							className="size-[18px]"
-						/>
-						Shared
 					</Button>
 					<Button
 						variant="ghost"
@@ -136,7 +120,6 @@ export function DashboardSidebar({
 				</div>
 				<div className="space-y-1 pt-6">
 					<SidebarCards />
-					<FeedbackDialog showLabel className={navClass(false)} onSignIn={onSignIn} />
 					<Button
 						variant="ghost"
 						className={navClass(section === "settings")}
@@ -149,10 +132,14 @@ export function DashboardSidebar({
 						/>
 						Settings
 					</Button>
-					<Button variant="ghost" className={navClass(false)} onClick={onSignIn}>
-						<UserCircle weight="fill" className="size-[18px] shrink-0" />
-						<span className="truncate">{accountLabel || "Sign in"}</span>
-					</Button>
+					<button
+						type="button"
+						className="block w-full truncate px-3 pt-2 text-left text-[11px] text-muted-foreground/70 hover:text-foreground"
+						title={UPSTREAM_ATTRIBUTION}
+						onClick={() => void window.electronAPI.openExternalUrl(UPSTREAM_REPO_URL)}
+					>
+						Based on {UPSTREAM_NAME}
+					</button>
 				</div>
 			</aside>
 		</>

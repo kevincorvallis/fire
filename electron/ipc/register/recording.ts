@@ -12,6 +12,7 @@ import {
 	shell,
 	systemPreferences,
 } from "electron";
+import { APP_NAME } from "../../../src/lib/branding";
 import { getHudCaptureExcludedProcessIds } from "../../../src/lib/hudCaptureProtection";
 import { showCursor } from "../../cursorHider";
 import {
@@ -714,12 +715,11 @@ export function registerRecordingHandlers(
 					!ALLOW_RECORDLY_WINDOW_CAPTURE &&
 					source?.id?.startsWith("window:") &&
 					appName &&
-					(appName === ownAppName || appName === "recordly")
+					(appName === ownAppName || appName === APP_NAME.toLowerCase())
 				) {
 					return {
 						success: false,
-						message:
-							"Cannot record Recordly windows. Please select another app window.",
+						message: `Cannot record ${APP_NAME} windows. Please select another app window.`,
 					};
 				}
 
@@ -858,9 +858,8 @@ export function registerRecordingHandlers(
 					const { response } = await dialog.showMessageBox({
 						type: "warning",
 						title: "Screen Recording Permission Required",
-						message:
-							"Recordly needs screen recording permission to capture your screen.",
-						detail: "Please open System Settings > Privacy & Security > Screen Recording, make sure Recordly is toggled ON, then try recording again.",
+						message: `${APP_NAME} needs screen recording permission to capture your screen.`,
+						detail: `Please open System Settings > Privacy & Security > Screen Recording, make sure ${APP_NAME} is toggled ON, then try recording again.`,
 						buttons: ["Open System Settings", "Cancel"],
 						defaultId: 0,
 						cancelId: 1,
@@ -892,8 +891,8 @@ export function registerRecordingHandlers(
 					const { response } = await dialog.showMessageBox({
 						type: "warning",
 						title: "Microphone Permission Required",
-						message: "Recordly needs microphone permission to record audio.",
-						detail: "Please open System Settings > Privacy & Security > Microphone, make sure Recordly is toggled ON, then try recording again.",
+						message: `${APP_NAME} needs microphone permission to record audio.`,
+						detail: `Please open System Settings > Privacy & Security > Microphone, make sure ${APP_NAME} is toggled ON, then try recording again.`,
 						buttons: ["Open System Settings", "Cancel"],
 						defaultId: 0,
 						cancelId: 1,

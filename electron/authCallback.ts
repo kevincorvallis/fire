@@ -1,5 +1,6 @@
 import { createServer, type Server } from "node:http";
 import { app, BrowserWindow, ipcMain } from "electron";
+import { APP_NAME } from "../src/lib/branding";
 
 const DEV_CALLBACK_HOST = "127.0.0.1:43821";
 const DEV_CALLBACK_ORIGIN = `http://${DEV_CALLBACK_HOST}`;
@@ -25,7 +26,7 @@ function callbackHeaders(contentType: string) {
 }
 
 export function createAuthCallbackController({ isDev, focusApp }: AuthCallbackOptions) {
-	const protocol = isDev ? "recordly-dev" : "recordly";
+	const protocol = isDev ? "klee-fire-dev" : "klee-fire";
 	let pendingUrl: string | null = null;
 	let server: Server | null = null;
 
@@ -91,7 +92,7 @@ export function createAuthCallbackController({ isDev, focusApp }: AuthCallbackOp
 			dispatch(appUrl.href);
 			response.writeHead(200, callbackHeaders("text/html; charset=utf-8"));
 			response.end(
-				'<!doctype html><meta charset="utf-8"><title>Return to Recordly</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#08090a;color:#ededef;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif}.card{max-width:420px;padding:32px;text-align:center}h1{font-size:22px;font-weight:500}p{color:#8b8b8e;line-height:1.6}</style><main class="card"><h1>Return to Recordly</h1><p>Your sign-in link has been received. Return to the app to finish signing in.</p></main>',
+				`<!doctype html><meta charset="utf-8"><title>Return to ${APP_NAME}</title><style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#08090a;color:#ededef;font:16px "Helvetica Neue",Helvetica,Arial,sans-serif}.card{max-width:420px;padding:32px;text-align:center}h1{font-size:22px;font-weight:500}p{color:#8b8b8e;line-height:1.6}</style><main class="card"><h1>Return to ${APP_NAME}</h1><p>Your sign-in link has been received. Return to the app to finish signing in.</p></main>`,
 			);
 		});
 		server.on("error", (error) => {

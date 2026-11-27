@@ -1,8 +1,9 @@
 import path from "node:path";
+import { APP_NAME } from "../src/lib/branding";
 import { app } from "electron";
 
 if (process.env["VITE_DEV_SERVER_URL"]) {
-	const devUserDataPath = path.join(app.getPath("appData"), "Recordly-dev");
+	const devUserDataPath = path.join(app.getPath("appData"), `${APP_NAME}-dev`);
 	app.setPath("userData", devUserDataPath);
 	app.setPath("sessionData", path.join(devUserDataPath, "session"));
 }

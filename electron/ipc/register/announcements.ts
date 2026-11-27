@@ -1,7 +1,7 @@
 import { ipcMain } from "electron";
+import { APP_ANNOUNCEMENTS_URL } from "../../../src/lib/branding";
 
-const DEFAULT_ANNOUNCEMENT_FEED_URL =
-	"https://raw.githubusercontent.com/webadderallorg/Recordly/main/announcements.json";
+const DEFAULT_ANNOUNCEMENT_FEED_URL = APP_ANNOUNCEMENTS_URL;
 const ANNOUNCEMENT_FETCH_TIMEOUT_MS = 5_000;
 const ANNOUNCEMENT_CACHE_TTL_MS = 6 * 60 * 60 * 1_000;
 const MAX_ANNOUNCEMENT_FEED_BYTES = 1_000_000;

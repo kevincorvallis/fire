@@ -18,6 +18,13 @@ import {
 	systemPreferences,
 	Tray,
 } from "electron";
+import {
+	APP_ID,
+	APP_NAME,
+	APP_REPO_URL,
+	UPSTREAM_ATTRIBUTION,
+	UPSTREAM_REPO_URL,
+} from "../src/lib/branding";
 import { RECORDINGS_DIR } from "./appPaths";
 import { createAuthCallbackController } from "./authCallback";
 import { showCursor } from "./cursorHider";
@@ -717,7 +724,7 @@ ipcMain.handle("check-for-app-updates", async () => {
 function updateTrayMenu(recording: boolean = false) {
 	if (!tray) return;
 	const trayIcon = recording ? getRecordingTrayIcon() : getDefaultTrayIcon();
-	const trayToolTip = recording ? `Recording: ${selectedSourceName}` : "Recordly";
+	const trayToolTip = recording ? `Recording: ${selectedSourceName}` : APP_NAME;
 	const menuTemplate = recording
 		? [
 				{
@@ -919,8 +926,15 @@ app.whenReady().then(async () => {
 	if (startupAuthCallback) authCallbacks.dispatch(startupAuthCallback);
 
 	if (process.platform === "win32") {
-		app.setAppUserModelId("dev.recordly.app");
+		app.setAppUserModelId(APP_ID);
 	}
+
+	app.setAboutPanelOptions({
+		applicationName: APP_NAME,
+		applicationVersion: app.getVersion(),
+		credits: `${UPSTREAM_ATTRIBUTION}\n${UPSTREAM_REPO_URL}`,
+		website: APP_REPO_URL,
+	});
 
 	session.defaultSession.setPermissionCheckHandler(
 		(webContents, permission, requestingOrigin, details) => {

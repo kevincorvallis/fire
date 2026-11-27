@@ -6,6 +6,7 @@ import { autoUpdater } from "electron-updater";
 import { USER_DATA_PATH } from "./appPaths";
 import { readAppSetting, writeAppSetting } from "./appSettingsStore";
 import { EXPERIMENTAL_UPDATE_DESCRIPTION, getUpdateChannelConfiguration } from "./updateChannel";
+import { APP_NAME } from "../src/lib/branding";
 
 const UPDATE_CHECK_INTERVAL_MS = 6 * 60 * 60 * 1000;
 const INITIAL_UPDATE_CHECK_DELAY_MS = 15 * 1000;
@@ -261,10 +262,10 @@ function createDownloadingUpdateToastPayload(
 		phase: "downloading",
 		detail:
 			normalizedProgress >= 100
-				? "Finishing the update download. Recordly will restart as soon as the installer is ready."
+				? `Finishing the update download. ${APP_NAME} will restart as soon as the installer is ready.`
 				: remainingMb !== null
-					? `${remainingMb.toFixed(1)} MB left before Recordly restarts.`
-					: "Downloading the update now. Recordly will restart when it finishes.",
+					? `${remainingMb.toFixed(1)} MB left before ${APP_NAME} restarts.`
+					: `Downloading the update now. ${APP_NAME} will restart when it finishes.`,
 		delayMs: UPDATE_REMINDER_DELAY_MS,
 		isExperimental,
 		progressPercent: normalizedProgress,
@@ -471,7 +472,7 @@ export async function downloadAvailableUpdate(
 	setUpdateStatusSummary({
 		status: "downloading",
 		availableVersion,
-		detail: `Downloading Recordly ${availableVersion}`,
+		detail: `Downloading ${APP_NAME} ${availableVersion}`,
 	});
 	emitUpdateToastState(
 		sendToRenderer,
@@ -589,7 +590,7 @@ async function showAvailableUpdateDialog(
 	const result = await showMessageBox(getMainWindow, {
 		type: "info",
 		title: isExperimental ? "Experimental Update Available" : "Update Available",
-		message: `Recordly ${version} is available${isExperimental ? " on the experimental channel" : ""}.`,
+		message: `${APP_NAME} ${version} is available${isExperimental ? " on the experimental channel" : ""}.`,
 		detail: isPreview
 			? `${isExperimental ? EXPERIMENTAL_UPDATE_DESCRIPTION : "This is a development preview of the standard update flow."} No real update will be installed.`
 			: isExperimental
@@ -633,8 +634,8 @@ async function showDownloadedUpdateDialog(
 		type: "info",
 		title: "Update Ready",
 		message: isPreview
-			? `Recordly ${version} is ready to install.`
-			: `Recordly ${version} has been downloaded.`,
+			? `${APP_NAME} ${version} is ready to install.`
+			: `${APP_NAME} ${version} has been downloaded.`,
 		detail: isPreview
 			? "Development preview of the native update prompt. No real update will be installed."
 			: "Install and restart now, or remind me later.",
@@ -686,7 +687,7 @@ async function showUpdateErrorDialog(
 	await showMessageBox(getMainWindow, {
 		type: "error",
 		title: "Update Failed",
-		message: `Recordly ${version} could not be downloaded.`,
+		message: `${APP_NAME} ${version} could not be downloaded.`,
 		detail: String(error),
 		buttons: ["OK"],
 		defaultId: 0,
@@ -782,7 +783,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "available",
 			availableVersion: info.version,
-			detail: `Recordly ${info.version} is available.`,
+			detail: `${APP_NAME} ${info.version} is available.`,
 		});
 		if (skippedVersion === info.version) {
 			manualCheckRequested = false;
@@ -810,7 +811,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "up-to-date",
 			availableVersion: null,
-			detail: `Recordly ${app.getVersion()} is up to date.`,
+			detail: `${APP_NAME} ${app.getVersion()} is up to date.`,
 		});
 		clearVisibleUpdateToast(sendToRenderer);
 		manualCheckRequested = false;
@@ -825,7 +826,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "downloading",
 			availableVersion,
-			detail: `Downloading Recordly ${availableVersion}`,
+			detail: `Downloading ${APP_NAME} ${availableVersion}`,
 		});
 		writeUpdaterLog(
 			`Download progress for ${availableVersion}: ${progress.percent.toFixed(1)}%`,
@@ -884,7 +885,7 @@ export function setupAutoUpdates(
 		setUpdateStatusSummary({
 			status: "ready",
 			availableVersion: info.version,
-			detail: `Recordly ${info.version} is ready to install.`,
+			detail: `${APP_NAME} ${info.version} is ready to install.`,
 		});
 		clearDeferredReminderTimer();
 

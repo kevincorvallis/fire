@@ -93,6 +93,7 @@ import type {
 	ExportResult,
 } from "./types";
 import { ENCODED_H264_COLOR_SPACE_FALLBACK, EXPORT_CANVAS_COLOR_SPACE } from "./videoColorSpace";
+import { APP_NAME } from "@/lib/branding";
 
 interface VideoExporterConfig extends ExportConfig {
 	videoUrl: string;
@@ -1052,7 +1053,7 @@ export class ModernVideoExporter {
 				);
 			}
 			guidance.add(
-				"The input video decoder failed before Recordly could finish rendering the source frames.",
+				`The input video decoder failed before ${APP_NAME} could finish rendering the source frames.`,
 			);
 			guidance.add(
 				"If only this recording fails, remux or convert it to a standard H.264 MP4; the source may contain a damaged or unsupported frame.",

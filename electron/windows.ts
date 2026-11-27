@@ -18,6 +18,7 @@ import {
 } from "./hudOverlayBounds";
 import { getHudOverlayTaskbarOptions } from "./hudOverlayWindowOptions";
 import { getPackagedRendererBaseUrl } from "./rendererServer";
+import { APP_NAME } from "../src/lib/branding";
 
 const electronWindowsDir = path.dirname(fileURLToPath(import.meta.url));
 const nodeRequire = createRequire(import.meta.url);
@@ -986,7 +987,7 @@ export function createEditorWindow(): BrowserWindow {
 		resizable: true,
 		alwaysOnTop: false,
 		skipTaskbar: false,
-		title: "Recordly",
+		title: `${APP_NAME}`,
 		show: false,
 		backgroundColor: "#000000",
 		webPreferences: {
