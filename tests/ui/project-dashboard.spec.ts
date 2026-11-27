@@ -289,7 +289,7 @@ test("deletion refreshes the grid and keeps unselected projects", async ({ page 
 	await expect(home.getByRole("button", { name: "Keep", exact: true })).toBeVisible();
 });
 
-test("cards rename inline, preserve folder chips and use existing share links", async ({
+test("cards rename inline, preserve folder chips and offer no web share links", async ({
 	page,
 }) => {
 	await installDesktopBridge(page);
@@ -325,12 +325,10 @@ test("cards rename inline, preserve folder chips and use existing share links", 
 	const home = page.getByRole("dialog", { name: "Projects dashboard" });
 	await expect(home.getByRole("button", { name: "Remove Demo from Work" })).toContainText("Work");
 	await home.getByRole("button", { name: "Options for Demo" }).click();
-	await page.getByRole("menuitem", { name: "View in web", exact: true }).click();
-	await expect(page.locator("html")).toHaveAttribute(
-		"data-opened-url",
-		"https://example.com/shared/demo",
-	);
-	await home.getByRole("button", { name: "Options for Demo" }).click();
+	// Cloud sharing was removed in the Fire rebrand: a stored share link must not
+	// bring back a "View in web" action.
+	await expect(page.getByRole("menuitem", { name: "Rename", exact: true })).toBeVisible();
+	await expect(page.getByRole("menuitem", { name: "View in web", exact: true })).toHaveCount(0);
 	await page.getByRole("menuitem", { name: "Rename", exact: true }).click();
 	const renameInput = home.getByRole("textbox", { name: "Project name" });
 	await expect(renameInput).toBeFocused();
@@ -347,7 +345,8 @@ test("cards rename inline, preserve folder chips and use existing share links", 
 		"Work",
 	);
 	await home.getByRole("button", { name: "Options for Renamed" }).click();
-	await expect(page.getByRole("menuitem", { name: "View in web", exact: true })).toBeVisible();
+	await expect(page.getByRole("menuitem", { name: "Rename", exact: true })).toBeVisible();
+	await expect(page.getByRole("menuitem", { name: "View in web", exact: true })).toHaveCount(0);
 });
 
 test("dashboard supports creation sort, independent folders, shared settings and precise captions", async ({
@@ -730,8 +729,10 @@ test("folder actions stay inside narrow project cards without clipping", async (
 		card.getByRole("button", { name: "Remove Project 1 from Work", exact: true }),
 	).toBeVisible();
 	await expect(card.locator('[aria-label="1 more folders: Work"]')).toHaveCount(0);
+	// The rebrand dropped the 48px account avatar from the caption row, so the
+	// card must be narrower than before for the second chip to overflow.
 	await card.evaluate((element) => {
-		element.style.width = "340px";
+		element.style.width = "276px";
 	});
 	await expect(card.locator('[aria-label="1 more folders: Work"]')).toBeVisible();
 	await add.click();
